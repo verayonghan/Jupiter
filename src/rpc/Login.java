@@ -36,13 +36,11 @@ public class Login extends HttpServlet {
 		// TODO Auto-generated method stub
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		DBConnection conn = DBConnectionFactory.getConnection(); //实际上如果不debug，不需要connection
-		
-		//get请求一般不需要用body，在header里面， 只需get parameter， post一般需要访问body
+		DBConnection conn = DBConnectionFactory.getConnection(); 
 		
 		
-		try {                                                //timCat自动映射session id和session
-			HttpSession session = request.getSession(false); //加boolean， true才返回新的，false则返回null
+		try {                                                
+			HttpSession session = request.getSession(false); 
 			JSONObject obj = new JSONObject();
 			if (session != null) {
 				
@@ -60,7 +58,7 @@ public class Login extends HttpServlet {
 			conn.close();
 		}
 			
-			//只存session.getId在cookie的，session object是保存在tomCat server里
+			
 		
 	}
 
@@ -74,20 +72,20 @@ public class Login extends HttpServlet {
 		
 		
 		try {
-			JSONObject input = RpcHelper.readJSONObject(request);  //读取request
+			JSONObject input = RpcHelper.readJSONObject(request);  
 			String userId = input.getString("user_id");
-			String password = input.getString("password");   //前端返回的接口
+			String password = input.getString("password");   
 			
 			JSONObject obj = new JSONObject();
 			if (conn.verifyLogin(userId, password)) {
-				HttpSession session = request.getSession();    //session由timCat提供, session id也由timcat放在相应的response里
-				session.setAttribute("user_id", userId);        //基于session之后要实现什么，只登录不需要写session
-				session.setMaxInactiveInterval(600); //设置有限时间
+				HttpSession session = request.getSession();    
+				session.setAttribute("user_id", userId);        
+				session.setMaxInactiveInterval(600);
 				obj.put("status", "OK").put("user_id", userId).put("name", conn.getFullname(userId));
-				//检查request header有没有session id， 如果有返回对应的object，如果没有创建一个新的session
+				
 			} else {
 				obj.put("status", "User Doesn't Exist"); //help debug
-				response.setStatus(401);  //用户名不存在或密码不正确，返回401 error
+				response.setStatus(401);  
 			}
 			
 			RpcHelper.writeJsonObject(response, obj); //help debug
