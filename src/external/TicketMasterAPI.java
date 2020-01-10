@@ -18,12 +18,6 @@ import org.json.JSONObject;
 import entity.Item;
 import entity.Item.ItemBuilder;
 
-// 1. ticket master(json) 
-// 2. back-end(java): json转换为item-object（数据清理），再转换为json-object返回给前端) -> 这之间还有其他操作，直接操作json object会不简洁
-// 3. front-end(java-script, json) ->
-
-// 401 authentication 身份验证错误 //login没成功
-// 403 authorization 身份验证通过，但没有权限 //login成功，无权访问
 
 public class TicketMasterAPI {
 	private static final String URL = "https://app.ticketmaster.com/discovery/v2/events.json"; 
@@ -60,7 +54,7 @@ public class TicketMasterAPI {
 		}
 		reader.close();
 		
-		JSONObject obj = new JSONObject(response.toString()); //string是json format的string
+		JSONObject obj = new JSONObject(response.toString()); 
 //		
 		if (!obj.isNull("_embedded")) {
 		JSONObject embedded = obj.getJSONObject("_embedded"); 
@@ -82,7 +76,7 @@ public class TicketMasterAPI {
 		for (int i = 0; i < events.length(); ++i) {
 			JSONObject event = events.getJSONObject(i); 
 			ItemBuilder builder = new ItemBuilder();
-			if (!event.isNull("id")) { //check有没有id这个key
+			if (!event.isNull("id")) { 
 				builder.setItemId(event.getString("id"));
 				}
 			if (!event.isNull("name")) {
