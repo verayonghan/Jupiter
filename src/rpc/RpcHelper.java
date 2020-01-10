@@ -33,7 +33,7 @@ public class RpcHelper {
 	public static JSONObject readJSONObject(HttpServletRequest request) {
         
 		StringBuilder sBuilder = new StringBuilder();
-		try (BufferedReader reader = request.getReader()) { //json format的string，reader是读取request body
+		try (BufferedReader reader = request.getReader()) { 
 			String line = null;
 			while((line = reader.readLine()) != null) {     
 				sBuilder.append(line);
